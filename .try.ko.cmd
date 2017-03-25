@@ -1,0 +1,1 @@
+cmd_/home/hortune/Documents/2017-os/try.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/hortune/Documents/2017-os/try.ko /home/hortune/Documents/2017-os/try.o /home/hortune/Documents/2017-os/try.mod.o
