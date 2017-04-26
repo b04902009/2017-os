@@ -6,10 +6,11 @@
 
 void *thread_func(void * num){
     int k = num;
+    k++;
     for (int i =0;i<3;i++){
         printf("Thread %d is running\n",k);
         double a = 0;
-        for (int qq =0 ;qq<660000000;qq++) a+=0.1f;
+        for (int qq =0 ;qq<1360000000;qq++) a+=0.1f;
     }
 }
 
@@ -18,17 +19,20 @@ int main(int argc,char * argv[]){
     pthread_attr_t attr;
     cpu_set_t cpus;
     pthread_attr_init(&attr);
-    CPU_ZERO(&cpus);
-    CPU_SET(0,&cpus);
     
     if (argc == 2){
         printf("%s\n",argv[1]);
     
     }
-    for (int i =0 ; i<2 ; i++){
-        pthread_attr_setaffinity_np(&attr,sizeof(cpu_set_t),&cpus);
-        printf ("??? %d\n",i);
-        pthread_create(&threads[i],&attr,thread_func,(void *) i);
+    else {
+        for (int i =0 ; i<2 ; i++){
+            CPU_ZERO(&cpus);
+            CPU_SET(0,&cpus);
+            pthread_attr_setaffinity_np(&attr,sizeof(cpu_set_t),&cpus);
+            printf ("??? %d\n",i);
+            pthread_create(&threads[i],&attr,thread_func,(void *) i);
+            printf("%d \n",i);
+        }
     }
     for (int i =0 ; i<2 ;i++)
         pthread_join(threads[i],NULL);
