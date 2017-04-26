@@ -8,7 +8,8 @@ void *thread_func(void * num){
     int k = num;
     for (int i =0;i<3;i++){
         printf("Thread %d is running\n",k);
-        sleep(1); 
+        double a = 0;
+        for (int qq =0 ;qq<660000000;qq++) a+=0.1f;
     }
 }
 
