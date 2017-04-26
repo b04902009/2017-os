@@ -29,9 +29,7 @@ int main(int argc,char * argv[]){
             CPU_ZERO(&cpus);
             CPU_SET(0,&cpus);
             pthread_attr_setaffinity_np(&attr,sizeof(cpu_set_t),&cpus);
-            printf ("??? %d\n",i);
             pthread_create(&threads[i],&attr,thread_func,(void *) i);
-            printf("%d \n",i);
         }
     }
     for (int i =0 ; i<2 ;i++)
