@@ -2,10 +2,11 @@
 #include <pthread.h>
 #include <sched.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <assert.h>
 void *thread_func(void * num){
-    int k = num;
+    int k = *((int*)num);
     k++;
     for (int i =0;i<3;i++){
         printf("Thread %d is running\n",k);
@@ -26,9 +27,6 @@ int main(int argc,char * argv[]){
     CPU_SET(0,&cpus);
     sched_setaffinity(0,sizeof(cpu_set_t),&cpus);
 
-    
-
-
     if (argc == 2){
         main_param.sched_priority = sched_get_priority_max(SCHED_FIFO);
         sched_setscheduler(getpid(),SCHED_FIFO,&main_param);
@@ -40,7 +38,9 @@ int main(int argc,char * argv[]){
             pthread_attr_setinheritsched(&attr[i], PTHREAD_EXPLICIT_SCHED);
             pthread_attr_setschedpolicy(&attr[i],SCHED_FIFO);
             pthread_attr_setschedparam(&attr[i],&param[i]);
-            assert(pthread_create(&threads[i],&attr[i],thread_func,(void *) i)==0);
+			int *num=(int *)malloc(sizeof(int));
+			*num=i;
+            assert(pthread_create(&threads[i],&attr[i],thread_func,(void*) num)==0);
             printf("Thread %d was created\n",i+1); 
         }
         
@@ -50,7 +50,9 @@ int main(int argc,char * argv[]){
 //            CPU_ZERO(&cpus);
 //            CPU_SET(0,&cpus);
 //            pthread_attr_setaffinity_np(&attr[i],sizeof(cpu_set_t),&cpus);
-            pthread_create(&threads[i],&attr[i],thread_func,(void *) i);
+			int *num=(int *)malloc(sizeof(int));
+			*num=i;
+			pthread_create(&threads[i],&attr[i],thread_func,(void*) num);
             printf("Thread %d was created\n",i+1); 
         }
     }
