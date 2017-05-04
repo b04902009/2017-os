@@ -61,7 +61,7 @@ static void
 yield_task_weighted_rr(struct rq *rq)
 {
 	// not yet implemented
-	list_move_tail(&(rp->curr->weighted_rr_list_item), &(rq->weighted_rr.queue));
+	list_move_tail(&(rq->curr->weighted_rr_list_item), &(rq->weighted_rr.queue));
 }
 
 /*
@@ -84,7 +84,7 @@ static struct task_struct *pick_next_task_weighted_rr(struct rq *rq)
 	// not yet implemented
 	queue = &((rq->weighted_rr).queue);
 	weighted_rr_rq = &(rq->weighted_rr);
-	if(weighted_rr.nr_running == 0)  return NULL;
+	if(rq->weighted_rr.nr_running == 0)  return NULL;
 	next = list_first_entry(queue, struct task_struct, weighted_rr_list_item);
 	next->se.exec_start = rq->clock;
 	return next;
@@ -177,9 +177,6 @@ move_one_task_weighted_rr(struct rq *this_rq, int this_cpu, struct rq *busiest,
  */
 static void task_tick_weighted_rr(struct rq *rq, struct task_struct *p,int queued)
 {
-	struct task_struct *curr;
-	struct weighted_rr_rq *weighted_rr_rq;
-	
 	// first update the task's runtime statistics
 	update_curr_weighted_rr(rq);
 
